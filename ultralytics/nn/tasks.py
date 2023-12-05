@@ -219,7 +219,7 @@ class BaseModel(nn.Module):
 class DetectionModel(BaseModel):
     """YOLOv8 detection model."""
 
-    def __init__(self, cfg='yolov8n.yaml', ch=3, nc=None, verbose=True):  # model, input channels, number of classes
+    def __init__(self, cfg='yolov8n.yaml', ch=3, nc=20, verbose=True):  # model, input channels, number of classes
         """Initialize the YOLOv8 detection model with the given config and parameters."""
         super().__init__()
         self.yaml = cfg if isinstance(cfg, dict) else yaml_model_load(cfg)  # cfg dict
@@ -659,6 +659,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
     nc, act, scales = (d.get(x) for x in ('nc', 'activation', 'scales'))
     depth, width, kpt_shape = (d.get(x, 1.0) for x in ('depth_multiple', 'width_multiple', 'kpt_shape'))
     if scales:
+        #There is no scale in the initial model, the scale exists in the configuration file
         scale = d.get('scale')
         if not scale:
             scale = tuple(scales.keys())[0]
